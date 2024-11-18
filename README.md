@@ -1,6 +1,6 @@
 # hermes_tracker
 
-A new Flutter application.
+Mobile app for tracking mail and packages at a university's mail center, developed using Flutter.
 
 ## Getting Started
 
