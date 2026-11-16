@@ -1,0 +1,35 @@
+{
+    "name": "Hermes Tracker",
+    "short_name": "Hermes",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#4A148C",
+    "theme_color": "#4A148C",
+    "description": "A Spring 2020 student team project for checking packages and letters in and out at a campus mail center, updated in 2026. Not an official Florida Polytechnic University app.",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-maskable-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icons/Icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}
