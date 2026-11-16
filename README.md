@@ -9,7 +9,7 @@ Team: [Adam Ghaffarian](https://github.com/b34st80y), [Michael Perez](https://gi
 ## What is in this repository
 
 - **Adam's early prototype (February 2020).** Adam Ghaffarian wrote the first version of the app: the Check-In page with its form and queue table, a placeholder Package Explorer page, the navigation drawer with the outlined "Hermes" title, the purple theme, and the `Package` and `Student` models. At that stage it had no database and the buttons were not wired up yet. The repository also has a draft Check-Out page.
-- **My Letters menu and Scan button (April 2020), ported.** I wrote these for the final team app, in pull requests #10 and #11 of the team repository, and they are ported here to Dart 3 and current Flutter widgets, with fixes for the bugs listed under [Changes since 2020](#changes-since-2020). Parts of the Letters menu started from Adam's code; see [Credits](#credits).
+- **My Letters menu and Scan button (April 2020), ported.** I wrote these for the final team app, in pull requests #10 and #11 of the team repository, and they are ported here to Dart 3 and current Flutter widgets, with bug fixes. Parts of the Letters menu started from Adam's code; see [Credits](#credits).
 - **2026 updates.** An in-memory data store with made-up students, packages and letters takes the place of the team app's Firebase database. The app builds with Flutter 3.50 and Dart 3.14, runs as a [web demo](#live-demo), and has tests.
 
 ## My role
@@ -72,38 +72,6 @@ flutter test
 - [`mail_store_test.dart`](test/mail_store_test.dart) and [`barcode_carrier_test.dart`](test/barcode_carrier_test.dart) are unit tests for the data store and the carrier rules.
 
 [`ci.yml`](.github/workflows/ci.yml) runs on GitHub Actions with Flutter 3.50.0. On every push it checks the formatting and runs `flutter analyze` and `flutter test`. On `main` it then builds the web demo and publishes it to GitHub Pages.
-
-## Changes since 2020
-
-The prototype and my two features were updated together in 2026.
-
-- **Flutter 3.** The app builds with Flutter 3.50 and Dart 3.14. It was written for Flutter 1.12 and Dart 2.7, before null safety, and Dart 3 no longer accepts such code. The code is now null-safe and uses current widgets (`FilledButton` and `TextButton` instead of `RaisedButton` and `FlatButton`, and a color scheme instead of `accentColor`), with Material from Flutter's new `material_ui` package. File names follow Dart's naming rules (`check_in_menu.dart` instead of `CheckInMenu.dart`), and the models are in `lib/models`.
-- **Platform folders.** `android/`, `ios/` and `web/` were recreated with `flutter create`, keeping the app's name and bundle IDs. The Android project had no `app/build.gradle`, so it could not be built at all. Files that Flutter recreates on every machine, such as the plugin registrants and the Gradle wrapper's scripts and jar, are no longer committed, and there is a `.gitignore`.
-- **Data.** An in-memory store ([`mail_store.dart`](lib/services/mail_store.dart)) with made-up sample data ([`sample_data.dart`](lib/services/sample_data.dart)) replaces Cloud Firestore, so the app needs no server or account. Its letter functions follow the Firestore functions I wrote in 2020. It also replaces the prototype's fixed list of sample packages.
-- **Scanning.** The barcode_scan plugin is no longer maintained. On Android and iOS the Scan button now uses mobile_scanner; on the web and on desktops it asks for the code to be typed in.
-- **Letters menu fixes.**
-  - Track saved names in lowercase, but Search compared the text as it was typed, so a name typed with capitals was never found. Search now ignores case and extra spaces, and also matches part of a name.
-  - Searching for a student with letters on two shelves listed each letter once for every matching shelf, so the two letters appeared four times.
-  - The list of all letters showed every empty shelf as a letter for "none". It now shows only the shelves with letters.
-  - After Track or Check Out during a search, the results did not change until the next search. They now update right away.
-  - Letters selected before a new search stayed selected out of sight, and Check Out took them too. After Check Out, the tiles stayed checked. The page now keeps the selection and clears it after each search, Track and Check Out.
-  - Track did nothing when every shelf was taken; it now says so. Track and Check Out also confirm what they did.
-- **Scan button fixes.**
-  - The "Please verify" dialog opened two seconds after the button was pressed, whether or not a code had been read. It now opens once a code is read, and a cancelled scan changes nothing.
-  - The carrier guessed from the barcode was kept in a variable that the Carrier field never showed, so the clerk could not check it. It now appears in the Carrier field.
-  - UPS and Amazon codes were never recognized: the UPS check compared the code with a lowercase "1z", and the Amazon check compared five characters with the six-character "tbamco". The rules now ignore case, and Amazon codes are recognized by their TBA prefix.
-  - Codes shorter than five characters made the scan fail before the code reached the Tracking field.
-  - The rule for 16-character codes (UPS) could never run, because the rule for 16 characters or more came first. It was removed.
-- **Prototype fixes.**
-  - The Check-In page has a Carrier field, which the Scan button fills in, and its Track button checks the package in to the queue. The carriers are Adam's list from the team app, which the 2020 Scan rules picked from.
-  - The text field controllers lived in stateless widgets, so they were never disposed and a rebuild of the page could lose what was typed. The pages are now stateful and dispose them.
-  - Every tap in the drawer pushed another page on top of the others, even for the page already open. The drawer now replaces the page, and the entry for the current page just closes the drawer.
-  - An unknown route, which a mistyped link can produce on the web, threw an error. It now opens the Check-In page.
-  - The queue table had empty sort and select handlers, which made its headers tappable and added a column of checkboxes, none of which did anything. They are gone.
-  - The draft Check-Out page did not scroll and overflowed on small screens. It now scrolls. It and the placeholder Package Explorer page say that they are not connected to the demo data.
-  - The "Hermes" title in the drawer shrinks instead of overflowing when the text is large.
-  - On a wide screen the app stays phone-sized in the middle of the window.
-- **Tests and CI.** The only test was Flutter's counter-app template, which did not compile. There are now widget and unit tests, and a GitHub Actions workflow that also publishes the web demo.
 
 ## Credits
 
